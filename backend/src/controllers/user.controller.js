@@ -78,9 +78,6 @@ const googleLogin = async (req, res) => {
           message: "Something went wrong in database call. Please try again. ",
         });
       }
-    } catch (error) {
-      console.log("Error while creating new user", error)
-    }
   
     return res
       .setHeader("accessToken", accessToken)
@@ -89,6 +86,10 @@ const googleLogin = async (req, res) => {
         success: true,
         message: "User created successfully."
       });
+
+    } catch (error) {
+        console.log("Error while creating new user", error)
+      }
   }
   
 export {googleLogin}
