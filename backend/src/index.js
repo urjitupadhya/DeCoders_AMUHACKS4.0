@@ -10,6 +10,8 @@ dotenv.config({
 })
 const app = express()
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(cors({
     origin: "*" ,
@@ -33,12 +35,15 @@ app.get("/", (req,res) => {
 
 // All Controllers import
 import { googleLogin } from "./controllers/user.controller.js";
+import { addCaller } from "./controllers/call-log.controller.js";
+import { verifyUserJWT } from "./middlewares/auth.js";
 
 
 
 
 // All Routes
 app.post("/api/user/googleLogin",googleLogin)
+app.post("/api/call/addCaller", verifyUserJWT, addCaller)
 
 
 

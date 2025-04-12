@@ -8,7 +8,7 @@ const callLogSchema = new mongoose.Schema(
             ref: "Users"
         },
         callerDetail: {
-            type: Object,
+            type: [Object],
             required: true
         },
         customMessage: {
