@@ -1,28 +1,32 @@
-import { CallLog } from "../models/emergency-call-log.model.js"
+import { Caller } from "../models/emergency-call-log.model.js"
 
 const addCaller = async (req,res) => {
     try {
         const {callerInfo} = req.body
         const user = req.user
     
-        const existedCallLog = await CallLog.find(user._id)
+        const existedCallLog = await Caller.aggregate([
+            {$match: {
+                "callerDetail" : callerInfo
+            }}
+        ])
+
+        // console.log(existedCallLog)
     
-        if (existedCallLog) {
-            existedCallLog.callerDetail.append(callerInfo)
-            const newCallLog = await CallLog.find(existedCallLog._id)
+        if (existedCallLog[0]) {
     
             return res.json({
-                message: newCallLog,
+                message: "Caller detail already existed.",
                 success: true
             })
         }
     
-        const callLog = await CallLog.create({
+        const callLog = await Caller.create({
             userID: user._id,
-            callerDetail: [callerInfo]
+            callerDetail: callerInfo
         })
     
-        const createdCallLog = await CallLog.findById(callLog._id)
+        const createdCallLog = await Caller.findById(callLog._id)
     
         return res.json({
             message: createdCallLog,
@@ -36,4 +40,40 @@ const addCaller = async (req,res) => {
 }
 
 
-export {addCaller}
+const deleteCaller = async (req,res) => {
+    const {id} = req.body
+    const user = req.user
+
+    const caller = await Caller.findById(id)
+    // console.log(user._id , caller.userID , caller)
+
+    if (user._id.toString() !== caller.userID.toString()) {
+        return res.json({
+            message: "Unauthorized request.",
+            success: false
+        })
+    }
+
+    await Caller.findByIdAndDelete(id)
+
+    return res.json({
+        message: "Caller info deleted successfully.",
+        success: true
+    })
+}
+
+
+const getCaller = async (req,res) => {
+    const user = req.user
+
+    const callerDetail = await Caller.find(user._id)
+
+    return res.json({
+        message: "Data fetched successfully.",
+        data: callerDetail,
+        success: true
+    })
+}
+
+
+export {addCaller, deleteCaller, getCaller}

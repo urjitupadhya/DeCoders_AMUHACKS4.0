@@ -35,7 +35,7 @@ app.get("/", (req,res) => {
 
 // All Controllers import
 import { googleLogin } from "./controllers/user.controller.js";
-import { addCaller } from "./controllers/call-log.controller.js";
+import { addCaller, deleteCaller, getCaller } from "./controllers/call-log.controller.js";
 import { verifyUserJWT } from "./middlewares/auth.js";
 
 
@@ -43,7 +43,11 @@ import { verifyUserJWT } from "./middlewares/auth.js";
 
 // All Routes
 app.post("/api/user/googleLogin",googleLogin)
-app.post("/api/call/addCaller", verifyUserJWT, addCaller)
+app.post("/api/caller/add", verifyUserJWT, addCaller)
+app.delete("/api/caller/delete", verifyUserJWT, deleteCaller)
+app.get("/api/caller/get", verifyUserJWT, getCaller)
+
+
 
 
 

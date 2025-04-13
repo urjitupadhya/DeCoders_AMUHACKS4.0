@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-const trackingSchema = new mongoose.Schema(
+const locationSchema = new mongoose.Schema(
     {
         userID: {
             type: mongoose.Schema.Types.ObjectId,
@@ -18,4 +18,4 @@ const trackingSchema = new mongoose.Schema(
     }
 )
 
-export const TrackingLocation = mongoose.model("TrackingLocation", trackingSchema)
+export const Location = mongoose.model("Location", locationSchema)
